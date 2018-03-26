@@ -1,0 +1,17 @@
+{
+  "extends": "eslint:recommended",
+  "parser": "babel-eslint",
+  "plugins": ["prettier"],
+  "env": {
+    "browser": true
+  },
+  "rules": {
+    "strict": 0,
+    "quotes": ["error", "single", { "avoidEscape": true }],
+    "comma-dangle": ["error", "always-multiline"],
+    "semi": ["error", "never"],
+    "prettier/prettier": "error",
+    "no-console": "off",
+    "import/no-webpack-loader-syntax": 0
+  }
+}

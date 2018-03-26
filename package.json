@@ -3,13 +3,24 @@
   "version": "1.0.0",
   "description": "Cross browser polyfill and builtins checker",
   "main": "src/index.js",
+  "lint-staged": {
+    "*.{js,json,css,md}": ["prettier --write", "git add"]
+  },
   "scripts": {
+    "lint": "eslint src",
+    "precommit": "lint-staged",
     "build:data": "node scripts/buildData.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "instea.co",
   "license": "ISC",
   "devDependencies": {
-    "mdn-browser-compat-data": "^0.0.29"
+    "babel-eslint": "^8.2.2",
+    "eslint": "^4.19.1",
+    "eslint-plugin-prettier": "^2.6.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^7.0.0",
+    "mdn-browser-compat-data": "^0.0.29",
+    "prettier": "^1.11.1"
   }
 }

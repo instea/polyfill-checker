@@ -11,7 +11,7 @@ function monkeyPatchBuiltins() {
     construct(target, argumentsList, newTarget) {
       console.warn('Using Promise constructor')
       return new target(...argumentsList)
-    }
+    },
   }
   Promise = new Proxy(Promise, handler)
 }
