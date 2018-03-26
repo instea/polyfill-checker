@@ -1,12 +1,9 @@
 import { get } from './utils'
 
-function log(...args) {
-  console.log('PCH:', ...args)
-}
-
 const omittedNames = ['Function', 'prototype', 'length', 'NaN', 'Infinity']
 
-export default function monkeyPatchBuiltins(data) {
+export default function monkeyPatchBuiltins(data, config) {
+  const { logger } = config
   const loggedKeys = {}
   let initialized = false
 
@@ -14,14 +11,14 @@ export default function monkeyPatchBuiltins(data) {
     if (loggedKeys[key] || !initialized) {
       return
     }
-    console.error('PCH:', ...args)
+    logger.error(...args)
     loggedKeys[key] = true
   }
 
   function patchConstructor(path, name) {
     const fullPath = path.concat(name)
     const fullName = fullPath.join('.')
-    log('patching constructor: ' + fullName)
+    logger.debug('patching constructor: ' + fullName)
     const parent = get(window, path)
     const handler = {
       construct(target, argumentsList) {
@@ -39,7 +36,7 @@ export default function monkeyPatchBuiltins(data) {
   function patchMethod(path, name) {
     const fullPath = path.concat(name)
     const fullName = fullPath.join('.')
-    log('patching method: ' + fullName)
+    logger.debug('patching method: ' + fullName)
     const parent = get(window, path)
     const fn = get(window, fullPath)
     const isPrototype = path[path.length - 1] === 'prototype'
@@ -56,7 +53,7 @@ export default function monkeyPatchBuiltins(data) {
 
   function patchBuiltins(name, path, data) {
     if (omittedNames.includes(name)) {
-      log('omitted: ' + name)
+      logger.debug('omitted: ' + name)
       return
     }
     const parent = get(window, path)
@@ -70,11 +67,11 @@ export default function monkeyPatchBuiltins(data) {
     try {
       subject = get(window, nextPath)
     } catch (e) {
-      log('forbidden: ' + fullName)
+      logger.debug('forbidden: ' + fullName)
       return
     }
     if (typeof subject === 'undefined') {
-      log('skipping: ' + fullName)
+      logger.debug('skipping: ' + fullName)
       return
     }
     if (typeof subject === 'function' && /^[A-Z]/.test(name)) {
