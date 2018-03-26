@@ -4,8 +4,12 @@
   "description": "Cross browser polyfill and builtins checker",
   "main": "src/index.js",
   "scripts": {
+    "build:data": "node scripts/buildData.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "instea.co",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "mdn-browser-compat-data": "^0.0.29"
+  }
 }
