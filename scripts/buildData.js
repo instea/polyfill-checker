@@ -1,4 +1,4 @@
-const bcd = require('mdn-browser-compat-data');
+const bcd = require('mdn-browser-compat-data')
 const fs = require('fs')
 
 console.log('building data...')

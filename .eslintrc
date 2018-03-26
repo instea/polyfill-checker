@@ -11,7 +11,9 @@
     "comma-dangle": ["error", "always-multiline"],
     "semi": ["error", "never"],
     "prettier/prettier": "error",
-    "no-console": "off",
-    "import/no-webpack-loader-syntax": 0
+    "no-console": "off"
+  },
+  "globals": {
+    "Proxy": true
   }
 }
