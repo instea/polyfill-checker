@@ -4,6 +4,7 @@ import monkeyPatchBuiltins from './monkeyPatchBuiltins'
 
 const defaultConfig = {
   logLevel: 'info',
+  logPrefix: '[PCH]',
   minBrowsers: {
     chrome: true,
     chrome_android: true,
@@ -23,7 +24,9 @@ const defaultConfig = {
 
 export function initialize(config = {}) {
   config = Object.assign({}, defaultConfig, config)
-  const logger = config.logger || makeLogger({ level: config.logLevel })
+  const logger =
+    config.logger ||
+    makeLogger({ level: config.logLevel, prefix: config.logPrefix })
   config = Object.assign({}, config, { logger })
   logger.info('Initializing Polyfill checker...')
   monkeyPatchBuiltins(data, config)

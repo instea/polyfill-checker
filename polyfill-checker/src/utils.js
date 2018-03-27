@@ -10,7 +10,7 @@ const logLevels = {
   fatal: 4,
 }
 
-export function makeLogger({ level, prefix = 'PCh' }) {
+export function makeLogger({ level, prefix = '' }) {
   level = logLevels[level]
   const debug = (...args) =>
     level <= logLevels.debug && console.log(prefix, ...args)
