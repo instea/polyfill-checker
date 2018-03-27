@@ -31,5 +31,8 @@
     "lint-staged": "^7.0.0",
     "mdn-browser-compat-data": "^0.0.29",
     "prettier": "^1.11.1"
+  },
+  "dependencies": {
+    "semver": "^5.5.0"
   }
 }

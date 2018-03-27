@@ -1,9 +1,5 @@
-function parseVersion(version) {
-  if (typeof version === 'boolean') {
-    return version
-  }
-  return parseInt(version, 10)
-}
+import semver from 'semver'
+
 export function makeSupportChecker({ logger }) {
   /**
    * Checks and finds browsers where feature is not supported
@@ -28,7 +24,7 @@ export function makeSupportChecker({ logger }) {
         )
         return false
       }
-      const suppVersion = parseVersion(descriptor.version_added)
+      const suppVersion = descriptor.version_added
       const minVersion = minBrowsers[browserKey]
       if (!minVersion) {
         return false
@@ -39,14 +35,17 @@ export function makeSupportChecker({ logger }) {
       if (suppVersion === true) {
         return false
       }
-      return suppVersion > minVersion
+      if (minVersion === true) {
+        return true
+      }
+      return semver.gt(semver.coerce(suppVersion), semver.coerce(minVersion))
     }
 
     function toSupportEntries(browserKey) {
       const descriptor = supportedBrowsers[browserKey]
       return {
         browser: browserKey,
-        version_added: parseVersion(descriptor.version_added),
+        version_added: descriptor.version_added,
         min_version: minBrowsers[browserKey],
       }
     }

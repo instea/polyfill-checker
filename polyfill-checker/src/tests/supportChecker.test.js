@@ -3,8 +3,10 @@ import { makeSupportChecker } from '../supportChecker'
 const minBrowsers = {
   chrome: true,
   edge: true,
-  firefox: 32,
-  ie: 10,
+  firefox: '32',
+  ie: '10',
+  safari: '11.3',
+  safari_mobile: '11.3.2',
 }
 
 const findUnsupported = makeSupportChecker({ logger: { debug: jest.fn() } })
@@ -29,8 +31,22 @@ describe('supportChecker', () => {
     expect(findUnsupported(minBrowsers, suppBrowsers)).toEqual([
       {
         browser: 'ie',
-        version_added: 11,
-        min_version: 10,
+        version_added: '11',
+        min_version: '10',
+      },
+    ])
+  })
+
+  it('should not be supported by version string', () => {
+    const suppBrowsers = {
+      safari: { version_added: '11.2' },
+      safari_mobile: { version_added: '11.3.3' },
+    }
+    expect(findUnsupported(minBrowsers, suppBrowsers)).toEqual([
+      {
+        browser: 'safari_mobile',
+        version_added: '11.3.3',
+        min_version: '11.3.2',
       },
     ])
   })
@@ -42,7 +58,7 @@ describe('supportChecker', () => {
     expect(findUnsupported(minBrowsers, suppBrowsers)).toEqual([
       {
         browser: 'chrome',
-        version_added: 9,
+        version_added: '9',
         min_version: true,
       },
     ])
