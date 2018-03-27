@@ -2,7 +2,7 @@
   "name": "polyfill-checker",
   "version": "1.0.0",
   "description": "Cross browser polyfill and builtins checker",
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "lint-staged": {
     "*.{js,json,css,md}": ["prettier --write", "git add"]
   },
@@ -10,13 +10,18 @@
     "lint": "eslint src",
     "precommit": "lint-staged",
     "build:data": "node scripts/buildData.js",
+    "compile": "babel src --out-dir lib --copy-files",
+    "prepublish": "npm run compile",
     "test": "jest",
     "test:watch": "jest --watch"
   },
   "author": "instea.co",
   "license": "ISC",
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.2",
+    "babel-loader": "^7.1.4",
     "babel-preset-es2015": "^6.24.1",
     "eslint": "^4.19.1",
     "eslint-plugin-jest": "^21.15.0",
