@@ -2,7 +2,7 @@
 
 Cross browser built-in functions/objects compatibility checker.
 
-[demo](./demo-min.png)
+![demo](./demo-min.png)
 
 ## Installation
 
