@@ -1,56 +1,28 @@
 import { makeSupportChecker } from './supportChecker'
+import { makePatchers } from './patchers'
 import { get } from './utils'
 
 const omittedNames = ['Function', 'prototype', 'length', 'NaN', 'Infinity']
 
 export default function monkeyPatchBuiltins(data, config) {
   const { logger, minBrowsers } = config
-  const loggedKeys = {}
+  const loggedUsages = {}
   let initialized = false
 
-  function logOnce(key, ...args) {
-    if (loggedKeys[key] || !initialized) {
+  function logOnceUsage(featureName) {
+    if (loggedUsages[featureName] || !initialized) {
       return
     }
-    logger.error(...args)
-    loggedKeys[key] = true
+    logger.error('Using ' + featureName)
+    loggedUsages[featureName] = true
   }
 
-  function patchConstructor(path, name) {
-    const fullPath = path.concat(name)
-    const fullName = fullPath.join('.')
-    logger.debug('patching constructor: ' + fullName)
-    const parent = get(window, path)
-    const handler = {
-      construct(target, argumentsList) {
-        logOnce(fullName, 'Using ' + fullName)
-        return new target(...argumentsList)
-      },
-      get(target, property) {
-        logOnce(fullName, 'Using ' + fullName)
-        return target[property]
-      },
-    }
-    parent[name] = new Proxy(parent[name], handler)
-  }
-
-  function patchMethod(path, name) {
-    const fullPath = path.concat(name)
-    const fullName = fullPath.join('.')
-    logger.debug('patching method: ' + fullName)
-    const parent = get(window, path)
-    const fn = get(window, fullPath)
-    const isPrototype = path[path.length - 1] === 'prototype'
-    parent[name] = function patchedBuiltin(...args) {
-      logOnce(fullName, 'Using ' + fullName)
-      const thisArg = isPrototype ? this : parent
-      return fn.apply(thisArg, args)
-    }
-  }
-
-  function patchProperty() {
-    // TODO: patch getter
-  }
+  const patchers = makePatchers({
+    onConstructor: logOnceUsage,
+    onMethod: logOnceUsage,
+    onProperty: logOnceUsage,
+    logger,
+  })
 
   const isSupported = makeSupportChecker({ logger })
 
@@ -70,27 +42,27 @@ export default function monkeyPatchBuiltins(data, config) {
       path.pop()
     }
     const nextPath = path.concat(name)
-    const fullName = nextPath.join('.')
+    const featureName = nextPath.join('.')
     let subject
     try {
       subject = get(window, nextPath)
     } catch (e) {
-      logger.debug('forbidden: ' + fullName)
+      logger.debug('forbidden: ' + featureName)
       return
     }
     if (typeof subject === 'undefined') {
-      logger.debug('skipping: ' + fullName)
+      logger.debug('skipping: ' + featureName)
       return
     }
     const suppBrowsers = data.__compat && data.__compat.support
-    const isCheckNeeded = !isSupported(minBrowsers, suppBrowsers, fullName)
+    const isCheckNeeded = !isSupported(minBrowsers, suppBrowsers, featureName)
     if (isCheckNeeded) {
       if (typeof subject === 'function' && /^[A-Z]/.test(name)) {
-        patchConstructor(path, name)
+        patchers.patchConstructor(path, name)
       } else if (typeof subject === 'function') {
-        patchMethod(path, name)
+        patchers.patchMethod(path, name)
       } else {
-        patchProperty(path, name)
+        patchers.patchProperty(path, name)
       }
     }
     Object.keys(data)
