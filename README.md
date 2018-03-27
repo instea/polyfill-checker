@@ -9,8 +9,9 @@ Development in progress...
 link local polyfill-checker:
 
 ```bash
+cd polyfill-checker
 yarn link
-cd examples
+cd ../example
 yarn link polyfill-checker
 yarn start
 ```
