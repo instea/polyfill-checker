@@ -7,7 +7,7 @@ const minBrowsers = {
   ie: 10,
 }
 
-const isSupported = makeSupportChecker({ logger: { debug: jest.fn() } })
+const findUnsupported = makeSupportChecker({ logger: { debug: jest.fn() } })
 
 describe('supportChecker', () => {
   it('should be fully supported', () => {
@@ -18,7 +18,7 @@ describe('supportChecker', () => {
       ie: { version_added: true },
       nodejs: { version_added: true },
     }
-    expect(isSupported(minBrowsers, suppBrowsers)).toBe(true)
+    expect(findUnsupported(minBrowsers, suppBrowsers)).toEqual([])
   })
 
   it('should not be supported by version number', () => {
@@ -26,31 +26,49 @@ describe('supportChecker', () => {
       chrome: { version_added: true },
       ie: { version_added: '11' },
     }
-    expect(isSupported(minBrowsers, suppBrowsers)).toBe(false)
+    expect(findUnsupported(minBrowsers, suppBrowsers)).toEqual([
+      {
+        browser: 'ie',
+        version_added: 11,
+        min_version: 10,
+      },
+    ])
   })
 
   it('should not be supported by full support flag', () => {
     const suppBrowsers = {
       chrome: { version_added: '9' },
     }
-    expect(isSupported(minBrowsers, suppBrowsers)).toBe(false)
+    expect(findUnsupported(minBrowsers, suppBrowsers)).toEqual([
+      {
+        browser: 'chrome',
+        version_added: 9,
+        min_version: true,
+      },
+    ])
   })
 
   it('should not be supported at all', () => {
     const suppBrowsers = {
       chrome: { version_added: false },
     }
-    expect(isSupported(minBrowsers, suppBrowsers)).toBe(false)
+    expect(findUnsupported(minBrowsers, suppBrowsers)).toEqual([
+      {
+        browser: 'chrome',
+        version_added: false,
+        min_version: true,
+      },
+    ])
   })
 
   it('should be supported when versions equal', () => {
     const suppBrowsers = {
       firefox: { version_added: '32' },
     }
-    expect(isSupported(minBrowsers, suppBrowsers)).toBe(true)
+    expect(findUnsupported(minBrowsers, suppBrowsers)).toEqual([])
   })
 
   it('should be supported on empty input', () => {
-    expect(isSupported(minBrowsers, undefined)).toBe(true)
+    expect(findUnsupported(minBrowsers, undefined)).toEqual([])
   })
 })

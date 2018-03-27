@@ -6,18 +6,19 @@ function parseVersion(version) {
 }
 export function makeSupportChecker({ logger }) {
   /**
-   * Checks if features is supported comparing to minBrowsers.
+   * Checks and finds browsers where feature is not supported
+   * comparing to minBrowsers.
    */
-  return function isFeatureSupported(
+  return function findUnsupportedBrowsers(
     minBrowsers,
     supportedBrowsers,
     featureName
   ) {
     if (!supportedBrowsers) {
       logger.debug('missing compatibility data, skipping: ' + featureName)
-      return true
+      return []
     }
-    return Object.keys(supportedBrowsers).every(browserKey => {
+    function filterUnsupported(browserKey) {
       const descriptor = supportedBrowsers[browserKey]
       if (Array.isArray(descriptor)) {
         logger.debug(
@@ -25,17 +26,32 @@ export function makeSupportChecker({ logger }) {
           featureName,
           descriptor
         )
-        return true
+        return false
       }
       const suppVersion = parseVersion(descriptor.version_added)
       const minVersion = minBrowsers[browserKey]
-      if (!minVersion || suppVersion === true || suppVersion === null) {
-        return true
-      }
-      if (suppVersion === false) {
+      if (!minVersion) {
         return false
       }
-      return suppVersion <= minVersion
-    })
+      if (suppVersion === false || suppVersion === null) {
+        return true
+      }
+      if (suppVersion === true) {
+        return false
+      }
+      return suppVersion > minVersion
+    }
+
+    function toSupportEntries(browserKey) {
+      const descriptor = supportedBrowsers[browserKey]
+      return {
+        browser: browserKey,
+        version_added: parseVersion(descriptor.version_added),
+        min_version: minBrowsers[browserKey],
+      }
+    }
+    return Object.keys(supportedBrowsers)
+      .filter(filterUnsupported)
+      .map(toSupportEntries)
   }
 }

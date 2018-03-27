@@ -9,11 +9,12 @@ export default function monkeyPatchBuiltins(data, config) {
   const loggedUsages = {}
   let initialized = false
 
-  function logOnceUsage(featureName) {
+  function logOnceUsage(featureName, data) {
     if (loggedUsages[featureName] || !initialized) {
       return
     }
-    logger.error('Using ' + featureName)
+    const report = { unsupportedBrowsers: data.unsupported }
+    logger.error('Using ' + featureName, report)
     loggedUsages[featureName] = true
   }
 
@@ -24,7 +25,7 @@ export default function monkeyPatchBuiltins(data, config) {
     logger,
   })
 
-  const isSupported = makeSupportChecker({ logger })
+  const findUnsupported = makeSupportChecker({ logger })
 
   function patchBuiltins(name, path, data) {
     if (omittedNames.includes(name)) {
@@ -55,14 +56,15 @@ export default function monkeyPatchBuiltins(data, config) {
       return
     }
     const suppBrowsers = data.__compat && data.__compat.support
-    const isCheckNeeded = !isSupported(minBrowsers, suppBrowsers, featureName)
-    if (isCheckNeeded) {
+    const unsupported = findUnsupported(minBrowsers, suppBrowsers, featureName)
+    if (unsupported.length) {
+      const data = { unsupported }
       if (typeof subject === 'function' && /^[A-Z]/.test(name)) {
-        patchers.patchConstructor(path, name)
+        patchers.patchConstructor(path, name, data)
       } else if (typeof subject === 'function') {
-        patchers.patchMethod(path, name)
+        patchers.patchMethod(path, name, data)
       } else {
-        patchers.patchProperty(path, name)
+        patchers.patchProperty(path, name, data)
       }
     }
     Object.keys(data)
