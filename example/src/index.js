@@ -6,7 +6,9 @@ import registerServiceWorker from './registerServiceWorker'
 
 import { initialize } from 'polyfill-checker'
 
-initialize()
+initialize({
+  exclude: ['Proxy', name => name.startsWith('Set')],
+})
 
 const arr = [1, 2, 3]
 arr.find(n => n === 2)

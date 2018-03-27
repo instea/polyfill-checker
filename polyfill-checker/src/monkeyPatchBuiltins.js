@@ -1,11 +1,11 @@
+import { get, isExcluded } from './utils'
 import { makeSupportChecker } from './supportChecker'
 import { makePatchers } from './patchers'
-import { get } from './utils'
 
 const omittedNames = ['Function', 'prototype', 'length', 'NaN', 'Infinity']
 
 export default function monkeyPatchBuiltins(data, config) {
-  const { logger, minBrowsers } = config
+  const { logger, minBrowsers, exclude } = config
   const loggedUsages = {}
   let initialized = false
 
@@ -57,7 +57,8 @@ export default function monkeyPatchBuiltins(data, config) {
     }
     const suppBrowsers = data.__compat && data.__compat.support
     const unsupported = findUnsupported(minBrowsers, suppBrowsers, featureName)
-    if (unsupported.length) {
+    const excluded = isExcluded(featureName, exclude)
+    if (unsupported.length && !excluded) {
       const data = { unsupported }
       if (typeof subject === 'function' && /^[A-Z]/.test(name)) {
         patchers.patchConstructor(path, name, data)

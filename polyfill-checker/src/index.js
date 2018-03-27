@@ -20,6 +20,7 @@ const defaultConfig = {
     safari_ios: 8,
     webview_android: true,
   },
+  exclude: [],
 }
 
 export function initialize(config = {}) {

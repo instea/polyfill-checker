@@ -22,3 +22,12 @@ export function makeLogger({ level, prefix = '' }) {
     level <= logLevels.error && console.error(prefix, ...args)
   return { debug, info, warn, error }
 }
+
+export function isExcluded(name, excludeList) {
+  return excludeList.some(matcher => {
+    if (typeof matcher === 'function') {
+      return matcher(name)
+    }
+    return matcher === name
+  })
+}
