@@ -4,6 +4,21 @@ import monkeyPatchBuiltins from './monkeyPatchBuiltins'
 
 const defaultConfig = {
   logLevel: 'info',
+  minBrowsers: {
+    chrome: true,
+    chrome_android: true,
+    edge: true,
+    edge_mobile: true,
+    firefox: 32,
+    firefox_android: 32,
+    ie: 10,
+    nodejs: true,
+    opera: true,
+    opera_android: true,
+    safari: 8,
+    safari_ios: 8,
+    webview_android: true,
+  },
 }
 
 export function initialize(config = {}) {
