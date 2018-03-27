@@ -10,15 +10,19 @@
     "lint": "eslint src",
     "precommit": "lint-staged",
     "build:data": "node scripts/buildData.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "author": "instea.co",
   "license": "ISC",
   "devDependencies": {
     "babel-eslint": "^8.2.2",
+    "babel-preset-es2015": "^6.24.1",
     "eslint": "^4.19.1",
+    "eslint-plugin-jest": "^21.15.0",
     "eslint-plugin-prettier": "^2.6.0",
     "husky": "^0.14.3",
+    "jest": "^22.4.3",
     "lint-staged": "^7.0.0",
     "mdn-browser-compat-data": "^0.0.29",
     "prettier": "^1.11.1"

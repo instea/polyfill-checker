@@ -1,5 +1,5 @@
 {
-  "extends": "eslint:recommended",
+  "extends": ["eslint:recommended", "plugin:jest/recommended"],
   "parser": "babel-eslint",
   "plugins": ["prettier"],
   "env": {

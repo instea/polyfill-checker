@@ -1,3 +1,4 @@
+import { makeSupportChecker } from './supportChecker'
 import { get } from './utils'
 
 const omittedNames = ['Function', 'prototype', 'length', 'NaN', 'Infinity']
@@ -51,28 +52,7 @@ export default function monkeyPatchBuiltins(data, config) {
     // TODO: patch getter
   }
 
-  function checkNeeded(compat, fullName) {
-    if (!compat || !compat.support) {
-      logger.debug('missing compatibility data, skipping: ' + fullName)
-      return false
-    }
-    return Object.keys(compat.support).some(browserKey => {
-      const descriptor = compat.support[browserKey]
-      if (Array.isArray(descriptor)) {
-        logger.debug('unsupported descriptor, skipping:', fullName, descriptor)
-        return false
-      }
-      const suppVersion = descriptor.version_added
-      const minVersion = minBrowsers[browserKey]
-      if (!minVersion || suppVersion === true || suppVersion === null) {
-        return false
-      }
-      if (suppVersion === false) {
-        return true
-      }
-      return suppVersion > minVersion
-    })
-  }
+  const isSupported = makeSupportChecker({ logger })
 
   function patchBuiltins(name, path, data) {
     if (omittedNames.includes(name)) {
@@ -102,7 +82,9 @@ export default function monkeyPatchBuiltins(data, config) {
       logger.debug('skipping: ' + fullName)
       return
     }
-    if (checkNeeded(data.__compat, fullName)) {
+    const suppBrowsers = data.__compat && data.__compat.support
+    const isCheckNeeded = !isSupported(minBrowsers, suppBrowsers, fullName)
+    if (isCheckNeeded) {
       if (typeof subject === 'function' && /^[A-Z]/.test(name)) {
         patchConstructor(path, name)
       } else if (typeof subject === 'function') {
