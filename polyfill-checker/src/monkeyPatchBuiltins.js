@@ -53,13 +53,13 @@ export default function monkeyPatchBuiltins(data, config) {
 
   function checkNeeded(compat, fullName) {
     if (!compat || !compat.support) {
-      logger.warn('missing compatibility data, skipping: ' + fullName)
+      logger.debug('missing compatibility data, skipping: ' + fullName)
       return false
     }
     return Object.keys(compat.support).some(browserKey => {
       const descriptor = compat.support[browserKey]
       if (Array.isArray(descriptor)) {
-        logger.warn('unsupported descriptor, skipping:', fullName, descriptor)
+        logger.debug('unsupported descriptor, skipping:', fullName, descriptor)
         return false
       }
       const suppVersion = descriptor.version_added
