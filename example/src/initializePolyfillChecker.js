@@ -1,6 +1,6 @@
 if (process.env.NODE_ENV !== 'production') {
   const { injectChecker } = require('polyfill-checker')
-  injectChecker({
+  window.__pch = injectChecker({
     exclude: [
       'Proxy',
       name => name.startsWith('Set'),

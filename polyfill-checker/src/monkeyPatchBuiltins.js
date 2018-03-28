@@ -4,24 +4,22 @@ import { makePatchers } from './patchers'
 
 const omittedNames = ['Function', 'prototype', 'length', 'NaN', 'Infinity']
 
-export default function monkeyPatchBuiltins(data, config) {
-  const { logger, minBrowsers, exclude } = config
-  const loggedUsages = {}
-  let initialized = false
+export default function monkeyPatchBuiltins(data, ctx) {
+  const { config, logger, reporter } = ctx
+  const { minBrowsers, exclude } = config
+  ctx.skipReporting = true
 
-  function logOnceUsage(featureName, data) {
-    if (loggedUsages[featureName] || !initialized) {
+  function reportUsage(featureName, data) {
+    if (ctx.skipReporting) {
       return
     }
-    const report = { unsupportedBrowsers: data.unsupported }
-    logger.error('Using ' + featureName, report)
-    loggedUsages[featureName] = true
+    reporter.usageReported(featureName, data)
   }
 
   const patchers = makePatchers({
-    onConstructor: logOnceUsage,
-    onMethod: logOnceUsage,
-    onProperty: logOnceUsage,
+    onConstructor: reportUsage,
+    onMethod: reportUsage,
+    onProperty: reportUsage,
     logger,
   })
 
@@ -80,5 +78,5 @@ export default function monkeyPatchBuiltins(data, config) {
   }
 
   initialize()
-  initialized = true
+  ctx.skipReporting = false
 }
