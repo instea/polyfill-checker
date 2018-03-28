@@ -12,15 +12,16 @@ npm install polyfill-checker
 
 ## Usage
 
-Import and initialize polyfill checker before the application runs:
+Import and initialize polyfill checker before your application runs:
 
 ```js
-import { initialize } from 'polyfill-checker'
-
-initialize()
+if (process.env.NODE_ENV !== 'production') {
+  const { injectChecker } = require('polyfill-checker')
+  injectChecker()
+}
 ```
 
-`initialize` function takes one optional config parameter, see [defaultConfig](./polyfill-checker/src/defaultConfig.js).
+`injectChecker` function takes one optional config parameter, see [defaultConfig](./polyfill-checker/src/defaultConfig.js).
 
 It uses [browser-compat-data](https://github.com/mdn/browser-compat-data) to check browser compatibility.
 
