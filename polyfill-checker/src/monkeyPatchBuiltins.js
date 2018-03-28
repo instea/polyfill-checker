@@ -26,6 +26,7 @@ export default function monkeyPatchBuiltins(data, ctx) {
   const findUnsupported = makeSupportChecker({ logger })
 
   function patchBuiltins(name, path, data) {
+    path = path.slice()
     if (omittedNames.includes(name)) {
       logger.debug('omitted: ' + name)
       return
