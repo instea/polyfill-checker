@@ -12,8 +12,7 @@
     "build:data": "node scripts/buildData.js",
     "compile": "babel src --out-dir lib --copy-files",
     "prepublish": "npm run compile",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "jest src"
   },
   "author": "instea.co",
   "license": "ISC",
