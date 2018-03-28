@@ -8,7 +8,7 @@ export default {
   minBrowsers: {
     chrome: '60',
     chrome_android: '60',
-    edge: true,
+    edge: '12',
     edge_mobile: true,
     firefox: '54',
     firefox_android: '54',
