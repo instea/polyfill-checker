@@ -3,7 +3,7 @@ import { makeLogger } from './utils'
 import data from './data'
 import monkeyPatchBuiltins from './monkeyPatchBuiltins'
 
-export function initialize(config = {}) {
+export function injectChecker(config = {}) {
   config = Object.assign({}, defaultConfig, config)
   const logger =
     config.logger ||
