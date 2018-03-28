@@ -16,8 +16,9 @@ Import and initialize polyfill checker before your application runs:
 
 ```js
 if (process.env.NODE_ENV !== 'production') {
-  const { injectChecker } = require('polyfill-checker')
-  injectChecker()
+  const { PolyfillChecker } = require('polyfill-checker')
+  const checker = new PolyfillChecker()
+  checker.injectChecker()
 }
 ```
 
