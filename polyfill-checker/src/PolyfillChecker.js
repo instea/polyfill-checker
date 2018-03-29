@@ -8,6 +8,11 @@ import Reporter from './Reporter.js'
 export default class PolyfillChecker {
   constructor(config = {}) {
     config = Object.assign({}, defaultConfig, config)
+    config.minBrowsers = Object.assign(
+      {},
+      defaultConfig.minBrowsers,
+      config.minBrowsers
+    )
     this.logger =
       config.logger ||
       makeLogger({ level: config.logLevel, prefix: config.logPrefix })
