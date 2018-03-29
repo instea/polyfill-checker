@@ -16,7 +16,7 @@ export default class Reporter {
     this.counts[featureName]++
     if (this.counts[featureName] === 1) {
       const report = { unsupportedBrowsers: data.unsupported }
-      this.ctx.logger.error('Using ' + featureName, report)
+      this.ctx.logger.error('Using incompatible ' + featureName, report)
     }
   }
 

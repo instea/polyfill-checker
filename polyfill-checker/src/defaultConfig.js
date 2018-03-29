@@ -21,6 +21,7 @@ export default {
   },
   // list of excluded builtins (usually list of included polyfills)
   // as string: Array.prototype.find
-  // as function: name => name.startsWith('Set')
+  // as function: name => name.indexOf('Set') === 0
+  // NOTE: in functions use only built-ins compatible with minBrowsers
   exclude: [],
 }

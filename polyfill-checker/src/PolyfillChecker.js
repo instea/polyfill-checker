@@ -24,9 +24,9 @@ export default class PolyfillChecker {
 
   // Inject polyfill checker to JS enviroment
   injectChecker() {
-    this.logger.info('Initializing Polyfill checker...')
+    this.logger.info('Initializing checker injection...')
     monkeyPatchBuiltins(data, this.ctx)
-    this.logger.info('Polyfill checker initialized')
+    this.logger.info('checker injection initialized')
   }
 
   downgradeMode() {
