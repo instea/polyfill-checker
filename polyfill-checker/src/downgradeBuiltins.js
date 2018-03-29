@@ -8,14 +8,14 @@ function makeDowngradePatchers({ logger }) {
       const featureName = fullPath.join('.')
       const parent = get(window, path)
       logger.debug('downgrading constructor: ' + featureName)
-      parent[name] = undefined
+      delete parent[name]
     },
     patchMethod(path, name) {
       const fullPath = path.concat(name)
       const featureName = fullPath.join('.')
       const parent = get(window, path)
       logger.debug('downgrading method: ' + featureName)
-      parent[name] = undefined
+      delete parent[name]
     },
     patchProperty() {
       // TODO: patch getter
