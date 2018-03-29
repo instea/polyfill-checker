@@ -1,14 +1,10 @@
 if (process.env.NODE_ENV !== 'production') {
-  const { PolyfillChecker } = require('polyfill-checker')
+  const { PolyfillChecker, createReactAppPreset } = require('polyfill-checker')
   const config = {
-    exclude: [
-      name => name.indexOf('Set') === 0,
-      name => name.indexOf('Map') === 0,
-      name => name.indexOf('Symbol') === 0,
-    ],
+    exclude: [createReactAppPreset],
   }
   const checker = new PolyfillChecker(config)
-  checker.injectChecker()
-  //checker.downgradeMode()
+  checker.downgradeMode()
+  // checker.injectChecker()
   window.__pch = checker
 }

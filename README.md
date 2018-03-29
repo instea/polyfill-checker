@@ -55,6 +55,22 @@ Be carefull when using exclude config and include appropriate polyfill or don't 
 
 **Note:** Using both `injectChecker` and `downgradeMode` doesn't make sense. You should use only one of them.
 
+## Integration
+
+3rd party libraries and frameworks often includes some polyfills into your application.
+We provide presets to exclude those polyfilled built-ins from the checker:
+
+```js
+const {
+  PolyfillChecker,
+  createReactAppPreset, // create-react-app
+} = require('polyfill-checker')
+
+const checker = new PolyfillChecker({
+  exclude: [createReactAppPreset]
+})
+```
+
 ## Contributing
 
 Contributions are welcome! Just open an issues with any idea or pull-request if it is no-brainer. Make sure all tests and linting rules pass.
