@@ -1,3 +1,4 @@
+import downgradeBuiltins from './downgradeBuiltins'
 import data from './data'
 import { makeLogger } from './utils'
 import monkeyPatchBuiltins from './monkeyPatchBuiltins'
@@ -21,5 +22,11 @@ export default class PolyfillChecker {
     this.logger.info('Initializing Polyfill checker...')
     monkeyPatchBuiltins(data, this.ctx)
     this.logger.info('Polyfill checker initialized')
+  }
+
+  downgradeMode() {
+    this.logger.info('Initializing downgrade mode...')
+    downgradeBuiltins(data, this.ctx)
+    this.logger.info('Downgrade mode initialized')
   }
 }
