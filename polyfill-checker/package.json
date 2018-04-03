@@ -15,8 +15,8 @@
     "precommit": "lint-staged",
     "build:data": "node scripts/buildData.js",
     "compile": "babel src --out-dir lib --copy-files",
-    "copy-readme": "cp ../README.md .",
-    "prepublish": "npm run compile; npm run copy-readme",
+    "copy-doc": "cp -r ../README.md ../doc .",
+    "prepublish": "npm run compile; npm run copy-doc",
     "test": "jest src"
   },
   "author": "instea.co",

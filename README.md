@@ -2,8 +2,8 @@
 
 Cross browser built-in functions/objects compatibility checker.
 
-![demo downgrade](./demo-downgrade-min.png)
-![demo injection](./demo-injection-min.png)
+![demo downgrade](./doc/demo-downgrade-min.png)
+![demo injection](./doc/demo-injection-min.png)
 
 ## Installation
 
