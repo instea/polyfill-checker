@@ -3,6 +3,10 @@
   "version": "0.0.4",
   "description": "Cross browser polyfill and builtins checker",
   "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/instea/polyfill-checker"
+  },
   "lint-staged": {
     "*.{js,json,css,md}": ["prettier --write", "git add"]
   },
@@ -11,7 +15,8 @@
     "precommit": "lint-staged",
     "build:data": "node scripts/buildData.js",
     "compile": "babel src --out-dir lib --copy-files",
-    "prepublish": "npm run compile",
+    "copy-readme": "cp ../README.md .",
+    "prepublish": "npm run compile; npm run copy-readme",
     "test": "jest src"
   },
   "author": "instea.co",

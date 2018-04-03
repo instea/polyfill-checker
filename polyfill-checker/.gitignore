@@ -17,3 +17,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# readme file is copied from parent directory and published to npm
+README.md
